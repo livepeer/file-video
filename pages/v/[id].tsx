@@ -2,7 +2,6 @@ import Link from "next/link";
 import Layout from "../../components/layout";
 import VideoPlayer from "../../components/video-player";
 import Spinner from "../../components/spinner";
-import { MUX_HOME_PAGE_URL } from "../../constants";
 import { useRouter } from "next/router";
 
 export function getStaticProps({ params: { id: playbackId } }) {

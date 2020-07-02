@@ -1,12 +1,15 @@
 import UploadForm from "../components/upload-form";
-import UploadPage from "../components/upload-page";
+import Layout from "../components/layout";
 
-export default function Home() {
+export default () => {
   return (
-    <UploadPage>
+    <Layout>
       <h1 className="title">Decentralized Video hosting for everyone.</h1>
       <p className="description">Powered by Livepeer & Filecoin</p>
       <UploadForm />
+      <div style={{ marginTop: 80 }}>
+        <p>Copy explaining livepeer + filecoin integration goes here...</p>
+      </div>
       <style jsx>{`
         .title a {
           color: #0070f3;
@@ -36,6 +39,6 @@ export default function Home() {
           font-size: 1.5rem;
         }
       `}</style>
-    </UploadPage>
+    </Layout>
   );
-}
+};

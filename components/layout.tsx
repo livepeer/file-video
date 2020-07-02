@@ -1,15 +1,21 @@
 import Head from "next/head";
 import Link from "next/link";
 
+interface Props {
+  metaTitle?: string;
+  metaDescription?: string;
+  image?: string;
+  children?: React.ReactNode;
+  loadTwitterWidget?: boolean;
+}
+
 export default function Layout({
-  title,
-  description,
-  metaTitle,
-  metaDescription,
-  image,
+  metaTitle = "",
+  metaDescription = "",
+  image = "",
   children,
-  loadTwitterWidget,
-}) {
+  loadTwitterWidget = false,
+}: Props) {
   return (
     <div className="container">
       <Head>
@@ -18,10 +24,10 @@ export default function Layout({
         {metaTitle && <meta property="og:title" content={metaTitle} />}
         {metaTitle && <meta property="twitter:title" content={metaTitle} />}
         {metaDescription && (
-          <meta property="og:description" content={description} />
+          <meta property="og:description" content={metaDescription} />
         )}
         {metaDescription && (
-          <meta property="twitter:description" content={description} />
+          <meta property="twitter:description" content={metaDescription} />
         )}
         {image && <meta property="og:image" content={image} />}
         {image && (
@@ -50,9 +56,7 @@ export default function Layout({
           <a>FAQ</a>
         </Link>
       </header>
-      <main>
-        <div className="grid">{children}</div>
-      </main>
+      <main>{children}</main>
 
       <style jsx>{`
         .container {

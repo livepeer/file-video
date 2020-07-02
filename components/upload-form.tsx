@@ -28,10 +28,11 @@ const UploadForm = () => {
 
   useEffect(() => {
     if (upload && upload.asset_id) {
-      Router.push({
+      let options = {
         pathname: `/asset/${upload.asset_id}`,
         scroll: false,
-      });
+      };
+      Router.push(options);
     }
   }, [upload]);
 

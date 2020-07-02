@@ -1,11 +1,8 @@
 import Layout from "./layout";
 
-export default function UploadPage({ description, children }) {
+export default function UploadPage({ children }) {
   return (
-    <Layout
-      title="Decentralized Video hosting for everyone."
-      description="Powered by Livepeer & Filecoin"
-    >
+    <Layout>
       <div className="wrapper">
         <div className="children">{children}</div>
         <div className="about">
