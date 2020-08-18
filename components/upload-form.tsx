@@ -1,13 +1,15 @@
+/** @jsx jsx */
+import { Button, Box, jsx } from "theme-ui";
 import { useEffect, useRef, useState } from "react";
 import Router from "next/router";
 import * as UpChunk from "@mux/upchunk";
 import useSwr from "swr";
-import Button from "./button";
 import Spinner from "./spinner";
 import ErrorMessage from "./error-message";
 
-const fetcher = (url) => {
-  return fetch(url).then((res) => res.json());
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  return res.json();
 };
 
 const UploadForm = () => {
@@ -79,32 +81,34 @@ const UploadForm = () => {
   if (errorMessage) return <ErrorMessage message={errorMessage} />;
 
   return (
-    <>
-      <div className="container">
-        {isUploading ? (
-          <>
-            {isPreparing ? (
-              <div>Preparing..</div>
-            ) : (
-              <div>Uploading...{progress ? `${progress}%` : ""}</div>
-            )}
-            <Spinner />
-          </>
-        ) : (
-          <label>
-            <Button type="button" onClick={() => inputRef.current.click()}>
-              Upload a video file
-            </Button>
-            <input type="file" onChange={startUpload} ref={inputRef} />
-          </label>
-        )}
-      </div>
-      <style jsx>{`
-        input {
-          display: none;
-        }
-      `}</style>
-    </>
+    <Box sx={{ display: "flex", justifyContent: ["center", "flex-start"] }}>
+      {isUploading ? (
+        <>
+          {isPreparing ? (
+            <div>Preparing..</div>
+          ) : (
+            <div>Uploading...{progress ? `${progress}%` : ""}</div>
+          )}
+          <Spinner />
+        </>
+      ) : (
+        <label>
+          <Button
+            type="button"
+            sx={{ fontSize: "18px" }}
+            onClick={() => inputRef.current.click()}
+          >
+            Upload a video file
+          </Button>
+          <input
+            sx={{ display: "none" }}
+            type="file"
+            onChange={startUpload}
+            ref={inputRef}
+          />
+        </label>
+      )}
+    </Box>
   );
 };
 

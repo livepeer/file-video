@@ -1,5 +1,12 @@
+/** @jsx jsx */
+import { jsx, Container, NavLink, Flex, Link as A, Text } from "theme-ui";
 import Head from "next/head";
 import Link from "next/link";
+import Logo from "./logos/file-video";
+import LivepeerLogo from "./logos/livepeer";
+import FilecoinLogo from "./logos/filecoin";
+import GitHubLogo from "./logos/github";
+import { footerHeight, navHeight } from "lib/constants";
 
 interface Props {
   metaTitle?: string;
@@ -7,7 +14,16 @@ interface Props {
   image?: string;
   children?: React.ReactNode;
   loadTwitterWidget?: boolean;
+  url?: string;
 }
+
+Layout.defaultProps = {
+  metaTitle: "file.video",
+  metaDescription:
+    "Decentralized live video streaming, built on the Ethereum blockchain. Livepeer is live on Ethereum mainnet.",
+  url: "https://file.video",
+  image: "https://file.video/OG.png",
+};
 
 export default function Layout({
   metaTitle = "",
@@ -15,12 +31,13 @@ export default function Layout({
   image = "",
   children,
   loadTwitterWidget = false,
+  url,
 }: Props) {
   return (
-    <div className="container">
+    <Container sx={{ minHeight: "100vh" }}>
       <Head>
         <title>Livepeer + Filecoin</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
         {metaTitle && <meta property="og:title" content={metaTitle} />}
         {metaTitle && <meta property="twitter:title" content={metaTitle} />}
         {metaDescription && (
@@ -29,6 +46,7 @@ export default function Layout({
         {metaDescription && (
           <meta property="twitter:description" content={metaDescription} />
         )}
+        {url && <meta property="og:url" content={url} />}
         {image && <meta property="og:image" content={image} />}
         {image && (
           <meta property="twitter:card" content="summary_large_image" />
@@ -43,125 +61,76 @@ export default function Layout({
         )}
       </Head>
       <header
-        style={{
+        sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: 30,
+          py: 4,
           width: "100%",
+          height: navHeight,
         }}
       >
-        <div style={{ fontWeight: "bold", fontSize: 24 }}>file.video</div>
-        <Link href="/faq">
-          <a>FAQ</a>
-        </Link>
+        <Logo />
+        <Flex sx={{ alignItems: "center" }}>
+          <Link href="/about" passHref>
+            <NavLink sx={{ mr: 4 }}>About</NavLink>
+          </Link>
+          <Link href="/faq" passHref>
+            <NavLink>FAQ</NavLink>
+          </Link>
+          <A
+            href="https://github.com/livepeer/file-video"
+            target="_blank"
+            rel="noopener"
+            sx={{ display: ["flex", "none"], alignItems: "center", ml: 4 }}
+          >
+            <GitHubLogo id="nav" />
+          </A>
+        </Flex>
       </header>
       <main>{children}</main>
-
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          min-height: -webkit-fill-available;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          padding: 1rem 0 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-          width: 71px;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 1rem;
-        }
-
-        .logo {
-          height: 1em;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-          .title {
-            font-size: 2.5rem;
-          }
-          footer {
-            height: 60px;
-          }
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        a {
-          color: #ff2b61;
-        }
-
-        p {
-          line-height: 1.4rem;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
+      <footer
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: ["center", "space-between"],
+          py: 3,
+          height: footerHeight,
+        }}
+      >
+        <Text sx={{ display: "flex", alignItems: "center" }} variant="normal">
+          Powered by
+          <A
+            href="https://livepeer.org"
+            target="_blank"
+            rel="noopener"
+            sx={{ ml: "12px", display: "flex", alignItems: "center" }}
+          >
+            <LivepeerLogo pushSx={{ mr: 2 }} />
+            Livepeer
+          </A>
+          &nbsp;&
+          <A
+            href="https://filecoin.io"
+            target="_blank"
+            rel="noopener"
+            sx={{ ml: "12px", display: "flex", alignItems: "center" }}
+          >
+            <FilecoinLogo pushSx={{ mr: 2 }} />
+            Filecoin
+          </A>
+        </Text>
+        <Text variant="normal">
+          <A
+            href="https://github.com/livepeer/file-video"
+            target="_blank"
+            rel="noopener"
+            sx={{ display: ["none", "flex"], alignItems: "center" }}
+          >
+            <GitHubLogo pushSx={{ mr: 2 }} /> github.com/livepeer/file-video
+          </A>
+        </Text>
+      </footer>
+    </Container>
   );
 }

@@ -1,0 +1,15 @@
+@font-face {
+  font-family: "TT Firs Neue";
+  src: url("/fonts/TTFirsNeue-Bold.woff2") format("woff2"),
+    url("/fonts/TTFirsNeue-Bold.woff") format("woff");
+  font-weight: bold;
+  font-display: auto;
+}
+
+@font-face {
+  font-family: "TT Firs Neue";
+  src: url("/fonts/TTFirsNeue-ExtraBold.woff2") format("woff2"),
+    url("/fonts/TTFirsNeue-ExtraBold.woff") format("woff");
+  font-weight: bolder;
+  font-display: auto;
+}

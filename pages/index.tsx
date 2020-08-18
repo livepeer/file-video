@@ -1,44 +1,37 @@
 import UploadForm from "../components/upload-form";
 import Layout from "../components/layout";
+import { Heading, Text } from "theme-ui";
+import ViewportHeightBox from "components/viewport-height-box";
 
-export default () => {
+export default function HomePage() {
   return (
     <Layout>
-      <h1 className="title">Decentralized Video hosting for everyone.</h1>
-      <p className="description">Powered by Livepeer & Filecoin</p>
-      <UploadForm />
-      <div style={{ marginTop: 80 }}>
-        <p>Copy explaining livepeer + filecoin integration goes here...</p>
-      </div>
-      <style jsx>{`
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          max-width: 800px;
-          margin: 0 auto;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-      `}</style>
+      <ViewportHeightBox
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
+        <Heading variant="heading.1" sx={{ textAlign: ["center", "left"] }}>
+          Decentralized Video
+          <br />
+          hosting for everyone.
+        </Heading>
+        <Text
+          variant="large"
+          sx={{
+            mb: [4, 5],
+            mt: [3, 4],
+            maxWidth: "587px",
+            textAlign: ["center", "left"],
+          }}
+        >
+          file.video is the easiest way to upload, edit, and share video. It’s
+          free to use and there’s no signup required.
+        </Text>
+        <UploadForm />
+      </ViewportHeightBox>
     </Layout>
   );
-};
+}
