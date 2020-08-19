@@ -7,8 +7,8 @@ const ViewportHeightBox = ({ sx, ...moreProps }: BoxProps) => (
       ...sx,
       minHeight: `calc(100vh - ${footerHeight} - ${navHeight})`,
       ...(navHeight > footerHeight
-        ? { pb: `calc(${navHeight} - ${footerHeight})` }
-        : { pt: `calc(${footerHeight} - ${navHeight})` }),
+        ? { pb: `calc(32px + ${navHeight} - ${footerHeight})`, pt: "32px" }
+        : { pt: `calc(32px + ${footerHeight} - ${navHeight})`, pb: "32px" }),
     }}
     {...moreProps}
   />

@@ -68,6 +68,10 @@ export default function Layout({
           py: 4,
           width: "100%",
           height: navHeight,
+          position: "sticky",
+          top: 0,
+          bg: "rgba(0,0,0,.5)",
+          backdropFilter: "saturate(180%) blur(5px)",
         }}
       >
         <Logo />
