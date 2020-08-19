@@ -141,11 +141,17 @@ const theme = {
       fontWeight: 600,
       transition: "background .15s",
       "&:hover": {
-        bg: "gradient.to",
+        bg: "#66F3B8",
       },
       "&:focus": {
         boxShadow: "0 0 0 4px rgba(0, 235, 136, .5)",
         outline: "none",
+      },
+      "&:disabled": {
+        cursor: "default",
+        "&:hover": {
+          bg: "primary",
+        },
       },
     },
     icon: {

@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Router from "next/router";
 import * as UpChunk from "@mux/upchunk";
 import useSwr from "swr";
-import Spinner from "./spinner";
 import ErrorMessage from "./error-message";
+import LoadingDots from "./loading-dots";
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -58,7 +58,7 @@ const UploadForm = () => {
     }
   };
 
-  const startUpload = (evt) => {
+  const startUpload = () => {
     setIsUploading(true);
     const upload = UpChunk.createUpload({
       endpoint: createUpload,
@@ -82,32 +82,31 @@ const UploadForm = () => {
 
   return (
     <Box sx={{ display: "flex", justifyContent: ["center", "flex-start"] }}>
-      {isUploading ? (
-        <>
-          {isPreparing ? (
-            <div>Preparing..</div>
+      <label>
+        <Button
+          type="button"
+          sx={{ fontSize: "18px" }}
+          onClick={() => inputRef.current.click()}
+          disabled={isUploading}
+        >
+          {isUploading ? (
+            <>
+              <span sx={{ mr: 4 }}>
+                Uploading {progress ? `${progress}%` : ""}
+              </span>
+              <LoadingDots />
+            </>
           ) : (
-            <div>Uploading...{progress ? `${progress}%` : ""}</div>
+            "Upload a video file"
           )}
-          <Spinner />
-        </>
-      ) : (
-        <label>
-          <Button
-            type="button"
-            sx={{ fontSize: "18px" }}
-            onClick={() => inputRef.current.click()}
-          >
-            Upload a video file
-          </Button>
-          <input
-            sx={{ display: "none" }}
-            type="file"
-            onChange={startUpload}
-            ref={inputRef}
-          />
-        </label>
-      )}
+        </Button>
+        <input
+          sx={{ display: "none" }}
+          type="file"
+          onChange={startUpload}
+          ref={inputRef}
+        />
+      </label>
     </Box>
   );
 };
