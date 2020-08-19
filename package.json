@@ -10,10 +10,12 @@
   "dependencies": {
     "@mux/mux-node": "^2.8.0",
     "@mux/upchunk": "^2.0.0",
+    "@sindresorhus/slugify": "^1.1.0",
     "hls.js": "^0.13.2",
     "next": "latest",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-icons": "^3.11.0",
     "swr": "^0.2.0",
     "theme-ui": "^0.3.1"
   },

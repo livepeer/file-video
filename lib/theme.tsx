@@ -91,19 +91,19 @@ const theme = {
   text: {
     normal: {
       fontFamily: "body",
-      fontSize: ["16px", "18px"],
+      fontSize: ["14px", "16px", null, null, "18px"],
       fontWeight: 400,
       lineHeight: "body",
     },
     large: {
       fontFamily: "body",
-      fontSize: ["18px", "20px"],
+      fontSize: ["16px", "18px", null, null, "20px"],
       fontWeight: 400,
       lineHeight: "body",
     },
     small: {
       fontFamily: "body",
-      fontSize: ["14px", "16px"],
+      fontSize: ["12px", "14px", null, null, "16px"],
       fontWeight: 400,
       lineHeight: "body",
     },
@@ -111,17 +111,17 @@ const theme = {
       1: {
         fontFamily: "special",
         fontSize: ["48px", "64px", null, null, "88px"],
-        fontWeight: 700,
+        fontWeight: 800,
         letterSpacing: "heading",
         lineHeight: [1, "heading"],
         textAlign: "left",
       },
       2: {
         fontFamily: "special",
-        fontSize: ["48px", "72px"],
+        fontSize: ["32px", "48px", null, null, "72px"],
         fontWeight: 800,
         letterSpacing: "heading",
-        lineHeight: [1.2, "heading"],
+        lineHeight: 1.2,
         textAlign: "left",
       },
     },
@@ -174,6 +174,7 @@ const theme = {
     accent: {
       color: "primary",
       fontWeight: 600,
+      textDecoration: "underline",
       ":hover": {
         opacity: 0.8,
         color: "primary",
