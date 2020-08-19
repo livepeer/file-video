@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import Router from "next/router";
 import * as UpChunk from "@mux/upchunk";
 import useSwr from "swr";
-import ErrorMessage from "./error-message";
 import LoadingDots from "./loading-dots";
 
 const fetcher = async (url: string) => {
@@ -12,17 +11,21 @@ const fetcher = async (url: string) => {
   return res.json();
 };
 
-const UploadForm = () => {
+type Props = {
+  error: string | undefined;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const UploadForm = ({ error, setError }: Props) => {
   const [isUploading, setIsUploading] = useState(false);
   const [isPreparing, setIsPreparing] = useState(false);
   const [uploadId, setUploadId] = useState(null);
   const [progress, setProgress] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
   const inputRef = useRef(null);
 
   const [upload, setUpload] = useState<any>();
 
-  const { data, error } = useSwr(
+  const { data, error: uploadError } = useSwr(
     () => (isPreparing ? `/api/upload/${uploadId}` : null),
     fetcher,
     { refreshInterval: 5000 }
@@ -35,7 +38,7 @@ const UploadForm = () => {
     }
   }, [data]);
 
-  const { data: assetData } = useSwr(
+  const { data: assetData, error: assetError } = useSwr(
     () => (upload?.asset_id ? `/api/asset/${upload.asset_id}` : null),
     fetcher,
     { refreshInterval: 3000 }
@@ -48,9 +51,6 @@ const UploadForm = () => {
       Router.push("/v/[id]", `/v/${asset.playback_id}`);
     }
   }, [asset]);
-
-  if (error) return <ErrorMessage message="Error fetching api" />;
-  if (data && data.error) return <ErrorMessage message={data.error} />;
 
   const createUpload = async () => {
     try {
@@ -65,7 +65,7 @@ const UploadForm = () => {
         });
     } catch (e) {
       console.error("Error in createUpload", e);
-      setErrorMessage("Error creating upload");
+      setError("Error creating upload");
     }
   };
 
@@ -77,7 +77,7 @@ const UploadForm = () => {
     });
 
     upload.on("error", (err) => {
-      setErrorMessage(err.detail);
+      setError(err.detail);
     });
 
     upload.on("progress", (progress) => {
@@ -89,7 +89,13 @@ const UploadForm = () => {
     });
   };
 
-  if (errorMessage) return <ErrorMessage message={errorMessage} />;
+  useEffect(() => {
+    // TODO handle these errors
+    if (error) {
+      setIsUploading(false);
+      setIsPreparing(false);
+    }
+  }, [uploadError, assetError, error]);
 
   return (
     <Box sx={{ display: "flex", justifyContent: ["center", "flex-start"] }}>
@@ -115,7 +121,7 @@ const UploadForm = () => {
               <LoadingDots />
             </>
           ) : (
-            "Upload a video file"
+            <>{error ? "Try again" : "Upload a video file"}</>
           )}
         </Button>
         <input
