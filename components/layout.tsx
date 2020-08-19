@@ -72,6 +72,7 @@ export default function Layout({
           top: 0,
           bg: "rgba(0,0,0,.5)",
           backdropFilter: "saturate(180%) blur(5px)",
+          zIndex: "header",
         }}
       >
         <Logo />

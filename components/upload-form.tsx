@@ -85,15 +85,18 @@ const UploadForm = () => {
       <label>
         <Button
           type="button"
-          sx={{ fontSize: "18px" }}
+          sx={{
+            fontSize: "18px",
+            minWidth: isUploading ? "270px" : undefined,
+            display: "inline-flex",
+            justifyContent: "space-between",
+          }}
           onClick={() => inputRef.current.click()}
           disabled={isUploading}
         >
           {isUploading ? (
             <>
-              <span sx={{ mr: 4 }}>
-                Uploading {progress ? `${progress}%` : ""}
-              </span>
+              <span sx={{ mr: 4 }}>Uploading {progress ?? "0"}%</span>
               <LoadingDots />
             </>
           ) : (
