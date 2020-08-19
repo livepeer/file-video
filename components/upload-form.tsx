@@ -20,25 +20,25 @@ const UploadForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const inputRef = useRef(null);
 
+  const [upload, setUpload] = useState<any>();
+
   const { data, error } = useSwr(
     () => (isPreparing ? `/api/upload/${uploadId}` : null),
     fetcher,
     { refreshInterval: 5000 }
   );
 
-  const upload = useMemo(() => data?.upload, [data]);
-
   useEffect(() => {
-    if (upload?.asset_id) {
-      // Video uploaded
+    if (data?.upload?.asset_id) {
+      setUpload(data.upload);
       setIsPreparing(false);
     }
-  }, [upload]);
+  }, [data]);
 
   const { data: assetData } = useSwr(
     () => (upload?.asset_id ? `/api/asset/${upload.asset_id}` : null),
     fetcher,
-    { refreshInterval: 5000 }
+    { refreshInterval: 3000 }
   );
 
   const asset = useMemo(() => assetData?.asset, [assetData]);
