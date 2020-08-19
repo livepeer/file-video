@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { Button, Box, jsx } from "theme-ui";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import Router from "next/router";
 import * as UpChunk from "@mux/upchunk";
 import useSwr from "swr";
@@ -26,17 +26,28 @@ const UploadForm = () => {
     { refreshInterval: 5000 }
   );
 
-  const upload = data && data.upload;
+  const upload = useMemo(() => data?.upload, [data]);
 
   useEffect(() => {
-    if (upload && upload.asset_id) {
-      let options = {
-        pathname: `/asset/${upload.asset_id}`,
-        scroll: false,
-      };
-      Router.push(options);
+    if (upload?.asset_id) {
+      // Video uploaded
+      setIsPreparing(false);
     }
   }, [upload]);
+
+  const { data: assetData } = useSwr(
+    () => (upload?.asset_id ? `/api/asset/${upload.asset_id}` : null),
+    fetcher,
+    { refreshInterval: 5000 }
+  );
+
+  const asset = useMemo(() => assetData?.asset, [assetData]);
+
+  useEffect(() => {
+    if (asset?.playback_id && asset.status === "ready") {
+      Router.push("/v/[id]", `/v/${asset.playback_id}`);
+    }
+  }, [asset]);
 
   if (error) return <ErrorMessage message="Error fetching api" />;
   if (data && data.error) return <ErrorMessage message={data.error} />;
@@ -96,7 +107,11 @@ const UploadForm = () => {
         >
           {isUploading ? (
             <>
-              <span sx={{ mr: 4 }}>Uploading {progress ?? "0"}%</span>
+              <span sx={{ mr: 4 }}>
+                {upload?.asset_id
+                  ? "Finishing up"
+                  : `Uploading ${progress ?? "0"}%`}
+              </span>
               <LoadingDots />
             </>
           ) : (
