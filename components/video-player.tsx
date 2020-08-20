@@ -70,11 +70,17 @@ export default function VideoPlayer({ src, poster }) {
   }, [copied]);
 
   return (
-    <div sx={{ textAlign: "center", maxWidth: "100%", mx: "auto" }}>
+    <div
+      sx={{ textAlign: "center", maxWidth: "100%", width: "100%", mx: "auto" }}
+    >
       <video
         ref={videoRef}
         poster={poster}
-        sx={{ borderRadius: "lg", "&:focus": { outline: "none" } }}
+        sx={{
+          borderRadius: "lg",
+          width: "100%",
+          "&:focus": { outline: "none" },
+        }}
       />
       <div
         sx={{
