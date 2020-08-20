@@ -1,8 +1,11 @@
+/** @jsx jsx */
+import { Heading, Text, Link as A, jsx } from "theme-ui";
 import Link from "next/link";
 import Layout from "../../components/layout";
 import VideoPlayer from "../../components/video-player";
 import Spinner from "../../components/spinner";
 import { useRouter } from "next/router";
+import ViewportHeightBox from "components/viewport-height-box";
 
 export function getStaticProps({ params: { id: playbackId } }) {
   const src = `https://stream.mux.com/${playbackId}.m3u8`;
@@ -44,42 +47,48 @@ export default function Playback({ playbackId, src, poster }) {
   }
 
   return (
-    <Layout
-      metaTitle="View this video created with Livepeer + Filecoin"
-      image={poster}
-      loadTwitterWidget
-    >
-      <div className="flash-message">This video is ready for playback</div>
-      <VideoPlayer src={src} poster={poster} />
-      <p>
-        Go{" "}
-        <Link href="/">
-          <a>back home</a>
-        </Link>{" "}
-        to upload another video.
-      </p>
-      <div className="about-playback">
-        <p>
-          Copy explaining how this video was transcoded and stored. Perhaps a
-          receipt to show costs as well.
-        </p>
-      </div>
-      <style jsx>{`
-        .flash-message {
-          position: absolute;
-          top: 0;
-          background-color: #c1dcc1;
-          width: 100%;
-          text-align: center;
-          padding: 20px 0;
-        }
-        .share-button {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 40px 0;
-        }
-      `}</style>
+    <Layout>
+      <ViewportHeightBox
+        sx={{
+          display: ["flex", null, null, null, "grid"],
+          flexDirection: "column",
+          justifyContent: "center",
+          gridTemplateColumns: ["1fr", null, null, null, "1fr 1fr"],
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <Heading
+            variant="heading.1"
+            sx={{ textAlign: ["center", null, null, null, "left"] }}
+          >
+            This video is ready for playback
+          </Heading>
+          <Text
+            variant="large"
+            sx={{
+              mb: [4, null, null, null, 5],
+              mt: [3, 4],
+              mx: ["auto", null, null, null, 0],
+              maxWidth: "587px",
+              textAlign: ["center", null, null, null, "left"],
+            }}
+          >
+            <span sx={{ display: ["none", "inline"] }}>
+              file.video is the easiest way to upload, edit, and share video.
+              It’s free to use and there’s no signup required.
+              <br />
+              <br />
+            </span>
+            Go{" "}
+            <Link href="/" passHref>
+              <A variant="accent">back home</A>
+            </Link>{" "}
+            to upload another video.
+          </Text>
+        </div>
+        <VideoPlayer src={src} poster={poster} />
+      </ViewportHeightBox>
     </Layout>
   );
 }

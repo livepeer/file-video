@@ -2,8 +2,10 @@ import UploadForm from "../components/upload-form";
 import Layout from "../components/layout";
 import { Heading, Text } from "theme-ui";
 import ViewportHeightBox from "components/viewport-height-box";
+import { useState } from "react";
 
 export default function HomePage() {
+  const [error, setError] = useState<string>();
   return (
     <Layout>
       <ViewportHeightBox
@@ -13,10 +15,13 @@ export default function HomePage() {
           justifyContent: "center",
         }}
       >
-        <Heading variant="heading.1" sx={{ textAlign: ["center", "left"] }}>
-          Decentralized Video
-          <br />
-          hosting for everyone.
+        <Heading
+          variant="heading.1"
+          sx={{ textAlign: ["center", "left"], maxWidth: "1112px" }}
+        >
+          {error
+            ? "Something went wrong, please try again."
+            : "Decentralized Video hosting for everyone."}
         </Heading>
         <Text
           variant="large"
@@ -27,10 +32,16 @@ export default function HomePage() {
             textAlign: ["center", "left"],
           }}
         >
-          file.video is the easiest way to upload, edit, and share video. It’s
-          free to use and there’s no signup required.
+          {error ? (
+            error
+          ) : (
+            <>
+              file.video is the easiest way to upload, edit, and share video.
+              It’s free to use and there’s no signup required.
+            </>
+          )}
         </Text>
-        <UploadForm />
+        <UploadForm error={error} setError={setError} />
       </ViewportHeightBox>
     </Layout>
   );
