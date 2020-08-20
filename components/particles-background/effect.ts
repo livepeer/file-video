@@ -1,27 +1,33 @@
 // Constants
-const rgbString = "rgba(0,235,136,"; //partial string for color which will be completed by appending alpha value.
-const sphereRad = 280;
-const radius_sp = 1;
+let rgbString = "rgba(0,235,136,"; //partial string for color which will be completed by appending alpha value.
+let sphereRad = 280;
+let radius_sp = 1;
 const wait = 1;
 const numToAddEachFrame = 8;
 const particleAlpha = 1;
 const fLen = 320; //represents the distance from the viewer to z=0 depth.
 const zMax = fLen - 2; //we will not draw coordinates if they have too large of a z-coordinate (which means they are very close to the observer).
 
+function getProjCenterX(displayWidth: number) {
+  // Some brekpoints
+  if (displayWidth < 1280) return displayWidth / 2;
+  return displayWidth * 0.7;
+}
+
 const canvasEffect = () => {
-  console.log("Here");
   const canvas = document.querySelector(
     "#particles-canvas"
   ) as HTMLCanvasElement;
   const context = canvas.getContext("2d");
 
-  const displayWidth = canvas.width;
-  const displayHeight = canvas.height;
+  let displayWidth = canvas.width;
+  let displayHeight = canvas.height;
   //projection center coordinates sets location of origin
-  const projCenterX = displayWidth / 2;
-  const projCenterY = displayHeight / 2;
+  let projCenterX = getProjCenterX(displayWidth);
+  let projCenterY = displayHeight / 2;
 
-  let timer;
+  const timers = [];
+  let direction = "top";
   let count;
   let particleList;
   let recycleBin;
@@ -72,7 +78,18 @@ const canvasEffect = () => {
     turnSpeed = (2 * Math.PI) / 1200; //the sphere will rotate at this speed (one complete rotation every 1600 frames).
     turnAngle = 0; //initial angle
 
-    timer = setInterval(onTimer, 10 / 24);
+    timers.push(setInterval(onTimer, 10 / 24));
+    timers.push(
+      setInterval(() => {
+        if (direction === "top") {
+          sphereRad += 5;
+          if (sphereRad > 600) direction = "bottom";
+        } else {
+          sphereRad -= 5;
+          if (sphereRad < 50) direction = "top";
+        }
+      }, 500)
+    );
   }
 
   function onTimer() {
@@ -289,32 +306,27 @@ const canvasEffect = () => {
       p.prev = null;
     }
   }
+
+  const setError = () => {
+    rgbString = "rgba(255,0,0,";
+  };
+
+  const clearError = () => {
+    rgbString = "rgba(0,235,136,";
+  };
+
+  const onUnmount = () => {
+    timers.forEach((timer) => window.clearInterval(timer));
+  };
+
+  const onResize = () => {
+    displayWidth = canvas.width;
+    displayHeight = canvas.height;
+    projCenterY = displayHeight / 2;
+    projCenterX = getProjCenterX(displayWidth);
+  };
+
+  return { setError, clearError, onUnmount, onResize };
 };
-
-//   $(function () {
-//     $("#slider-range").slider({
-//       range: false,
-//       min: 20,
-//       max: 500,
-//       value: 280,
-//       slide: function (event, ui) {
-//         console.log(ui.value);
-//         sphereRad = ui.value;
-//       },
-//     });
-//   });
-
-//   $(function () {
-//     $("#slider-test").slider({
-//       range: false,
-//       min: 1.0,
-//       max: 2.0,
-//       value: 1,
-//       step: 0.01,
-//       slide: function (event, ui) {
-//         radius_sp = ui.value;
-//       },
-//     });
-//   });
 
 export default canvasEffect;

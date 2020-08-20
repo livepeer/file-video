@@ -18,6 +18,7 @@ interface Props {
   loadTwitterWidget?: boolean;
   url?: string;
   withParticlesBackground?: boolean;
+  error?: boolean;
 }
 
 Layout.defaultProps = {
@@ -36,6 +37,7 @@ export default function Layout({
   loadTwitterWidget = false,
   url,
   withParticlesBackground,
+  error,
 }: Props) {
   const [hasScrolled, setHasScrolled] = useState(false);
 
@@ -56,7 +58,7 @@ export default function Layout({
 
   return (
     <Box sx={{ bg: "background", minHeight: "100vh" }}>
-      {withParticlesBackground && <ParticlesBackground />}
+      {withParticlesBackground && <ParticlesBackground error={error} />}
       <Head>
         <title>Livepeer + Filecoin</title>
         <link rel="icon" href="/favicon.png" />

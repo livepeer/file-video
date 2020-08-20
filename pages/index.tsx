@@ -7,7 +7,7 @@ import { useState } from "react";
 export default function HomePage() {
   const [error, setError] = useState<string>();
   return (
-    <Layout withParticlesBackground>
+    <Layout error={!!error} withParticlesBackground>
       <ViewportHeightBox
         sx={{
           display: "flex",

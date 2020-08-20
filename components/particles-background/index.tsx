@@ -1,31 +1,50 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import canvasEffect from "./effect";
 
-const ParticlesBackground = () => {
-  const [isInitialized, setIsInitialized] = useState(false);
-  const [viewportSize, setViewportSize] = useState<{
-    width: number;
-    height: number;
+const ParticlesBackground = ({ error = false }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const effectControls = useRef<{
+    setError: () => void;
+    clearError: () => void;
+    onUnmount: () => void;
+    onResize: () => void;
   }>();
 
-  useEffect(() => {
-    if (isInitialized) return;
-    if (!viewportSize) {
-      setViewportSize({ width: window.innerWidth, height: window.innerHeight });
-      return;
+  const handleResize = useCallback(() => {
+    if (canvasRef.current && effectControls.current) {
+      const { innerWidth, innerHeight } = window;
+      canvasRef.current.width = innerWidth;
+      canvasRef.current.height = innerHeight;
+      effectControls.current.onResize();
     }
-    setIsInitialized(true);
-    canvasEffect();
-  }, [isInitialized, viewportSize]);
+  }, [effectControls, canvasRef]);
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    const { innerWidth, innerHeight } = window;
+    canvasRef.current.width = innerWidth;
+    canvasRef.current.height = innerHeight;
+    const controls = canvasEffect();
+    effectControls.current = controls;
+    window.addEventListener("resize", handleResize);
+    return () => {
+      controls.onUnmount();
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [canvasRef]);
+
+  useEffect(() => {
+    if (error) effectControls.current?.setError();
+    else effectControls.current?.clearError();
+  }, [error, effectControls]);
 
   return (
     <canvas
+      ref={canvasRef}
       id="particles-canvas"
-      width={viewportSize?.width}
-      height={viewportSize?.height}
-      sx={{ position: "absolute" }}
+      sx={{ position: "absolute", right: 0 }}
     />
   );
 };
