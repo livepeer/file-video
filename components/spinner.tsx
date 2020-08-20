@@ -1,4 +1,4 @@
-export default function Spinner({ size = 6, color = '#999' }) {
+export default function Spinner({ size = 6, color = "#00EB88" }) {
   return (
     <>
       <div className="spinner" />
@@ -6,23 +6,23 @@ export default function Spinner({ size = 6, color = '#999' }) {
         .spinner,
         .spinner:after {
           border-radius: 50%;
-          width: 10em;
-          height: 10em;
+          width: 8em;
+          height: 8em;
         }
         .spinner {
           margin: 60px auto;
           font-size: ${size}px;
           position: relative;
           text-indent: -9999em;
-          border-top: 1.1em solid ${color};
-          border-right: 1.1em solid ${color};
-          border-bottom: 1.1em solid ${color};
-          border-left: 1.1em solid transparent;
+          border-top: 1em solid ${color};
+          border-right: 1em solid ${color};
+          border-bottom: 1em solid ${color};
+          border-left: 1em solid transparent;
           -webkit-transform: translateZ(0);
           -ms-transform: translateZ(0);
           transform: translateZ(0);
-          -webkit-animation: load8 1.1s infinite linear;
-          animation: load8 1.1s infinite linear;
+          -webkit-animation: load8 0.85s infinite linear;
+          animation: load8 0.85s infinite linear;
         }
         @-webkit-keyframes load8 {
           0% {
@@ -46,5 +46,5 @@ export default function Spinner({ size = 6, color = '#999' }) {
         }
       `}</style>
     </>
-  )
+  );
 }
