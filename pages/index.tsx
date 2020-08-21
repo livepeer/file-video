@@ -24,7 +24,7 @@ export default function HomePage() {
             : "Decentralized Video hosting for everyone."}
         </Heading>
         <Text
-          variant="large"
+          variant="normal"
           sx={{
             mb: [4, 5],
             mt: [3, 4],

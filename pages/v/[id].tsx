@@ -69,7 +69,7 @@ export default function Playback({ src, poster }) {
             This video is ready for playback
           </Heading>
           <Text
-            variant="large"
+            variant="normal"
             sx={{
               mb: [4, null, null, null, 5],
               mt: [3, 4],

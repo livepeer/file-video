@@ -133,7 +133,7 @@ export default function Layout({
             height: footerHeight,
           }}
         >
-          <Text sx={{ display: "flex", alignItems: "center" }} variant="normal">
+          <Text sx={{ display: "flex", alignItems: "center" }} variant="small">
             Powered by
             <A
               href="https://livepeer.org"
@@ -155,7 +155,7 @@ export default function Layout({
               Filecoin
             </A>
           </Text>
-          <Text variant="normal">
+          <Text variant="small">
             <A
               href="https://github.com/livepeer/file-video"
               target="_blank"

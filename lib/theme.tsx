@@ -74,9 +74,8 @@ const theme = {
   // VARIANTS
   layout: {
     container: {
-      maxWidth: 1400,
       mx: "auto",
-      px: 3,
+      px: [3, 4, 5],
     },
     flexCenter: {
       display: "flex",
@@ -91,19 +90,13 @@ const theme = {
   text: {
     normal: {
       fontFamily: "body",
-      fontSize: ["14px", "16px", null, null, "18px"],
-      fontWeight: 400,
-      lineHeight: "body",
-    },
-    large: {
-      fontFamily: "body",
-      fontSize: ["16px", "18px", null, null, "20px"],
+      fontSize: ["16px", "18px"],
       fontWeight: 400,
       lineHeight: "body",
     },
     small: {
       fontFamily: "body",
-      fontSize: ["12px", "14px", null, null, "16px"],
+      fontSize: ["14px", "16px"],
       fontWeight: 400,
       lineHeight: "body",
     },
@@ -121,7 +114,7 @@ const theme = {
         fontSize: ["32px", "48px", null, null, "72px"],
         fontWeight: 800,
         letterSpacing: "heading",
-        lineHeight: 1.2,
+        lineHeight: 0.95,
         textAlign: "left",
       },
     },

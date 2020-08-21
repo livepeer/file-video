@@ -15,7 +15,6 @@ html {
   box-sizing: border-box; /* 2 */
   text-rendering: geometricPrecision; /* 2 */
   -webkit-font-smoothing: antialiased; /* 3 */
-  -webkit-font-smoothing: subpixel-antialiased; /* 3 */
   -moz-font-smoothing: antialiased; /* 3 */
   font-smoothing: antialiased; /* 3 */
   -moz-osx-font-smoothing: grayscale; /* 3 */
