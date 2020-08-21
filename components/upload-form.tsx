@@ -6,6 +6,8 @@ import * as UpChunk from "@mux/upchunk";
 import useSwr from "swr";
 import LoadingDots from "./loading-dots";
 
+const acceptedFileTypes = ["video/mp4"];
+
 const fetcher = async (url: string) => {
   const res = await fetch(url);
   return res.json();
@@ -21,14 +23,19 @@ const UploadForm = ({ error, setError }: Props) => {
   const [isPreparing, setIsPreparing] = useState(false);
   const [uploadId, setUploadId] = useState(null);
   const [progress, setProgress] = useState(null);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [upload, setUpload] = useState<any>();
 
-  const { data, error: uploadError } = useSwr(
+  const { data } = useSwr(
     () => (isPreparing ? `/api/upload/${uploadId}` : null),
     fetcher,
-    { refreshInterval: 5000 }
+    {
+      refreshInterval: 5000,
+      onError: (err) => {
+        setError(err?.message ?? "Error creating upload");
+      },
+    }
   );
 
   useEffect(() => {
@@ -38,10 +45,15 @@ const UploadForm = ({ error, setError }: Props) => {
     }
   }, [data]);
 
-  const { data: assetData, error: assetError } = useSwr(
+  const { data: assetData } = useSwr(
     () => (upload?.asset_id ? `/api/asset/${upload.asset_id}` : null),
     fetcher,
-    { refreshInterval: 3000 }
+    {
+      refreshInterval: 3000,
+      onError: (err) => {
+        setError(err?.message ?? "Error creating upload");
+      },
+    }
   );
 
   const asset = useMemo(() => assetData?.asset, [assetData]);
@@ -55,29 +67,35 @@ const UploadForm = ({ error, setError }: Props) => {
   const createUpload = async () => {
     try {
       // TODO: replace this api with the livepeer/filecoin gateway api
-      return fetch("/api/upload", {
+      const res = await fetch("/api/upload", {
         method: "POST",
-      })
-        .then((res) => res.json())
-        .then(({ id, url }) => {
-          setUploadId(id);
-          return url;
-        });
+      });
+      const { id, url } = await res.json();
+      setUploadId(id);
+      return url;
     } catch (e) {
       console.error("Error in createUpload", e);
-      setError("Error creating upload");
+      setError(e?.message ?? "Error creating upload");
     }
   };
 
   const startUpload = () => {
+    setError(undefined);
     setIsUploading(true);
+    setProgress(0);
+
+    const file = inputRef.current.files[0];
+    if (!acceptedFileTypes.includes(file.type)) {
+      setError(`File type ${file.type} not supported`);
+      return;
+    }
     const upload = UpChunk.createUpload({
+      file,
       endpoint: createUpload,
-      file: inputRef.current.files[0],
     });
 
     upload.on("error", (err) => {
-      setError(err.detail);
+      setError(err?.detail?.message ?? "Error creating upload");
     });
 
     upload.on("progress", (progress) => {
@@ -90,12 +108,12 @@ const UploadForm = ({ error, setError }: Props) => {
   };
 
   useEffect(() => {
-    // TODO handle these errors
     if (error) {
       setIsUploading(false);
       setIsPreparing(false);
+      if (inputRef.current) inputRef.current.value = "";
     }
-  }, [uploadError, assetError, error]);
+  }, [inputRef, error]);
 
   return (
     <Box sx={{ display: "flex", justifyContent: ["center", "flex-start"] }}>
