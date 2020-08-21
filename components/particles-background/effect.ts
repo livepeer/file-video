@@ -10,15 +10,15 @@ const zMax = fLen - 2; //we will not draw coordinates if they have too large of 
 
 function getProjCenterX(displayWidth: number) {
   // Some brekpoints
-  if (displayWidth < 1280) return displayWidth / 2;
-  return displayWidth * 0.7;
+  if (displayWidth < 1280) return Math.round(displayWidth / 2);
+  return Math.round(displayWidth * 0.7);
 }
 
 const canvasEffect = () => {
   const canvas = document.querySelector(
     "#particles-canvas"
   ) as HTMLCanvasElement;
-  const context = canvas.getContext("2d");
+  const context = canvas.getContext("2d", { alpha: false });
 
   let displayWidth = canvas.width;
   let displayHeight = canvas.height;
