@@ -38,7 +38,7 @@ const canvasEffect = () => {
   let randAccelX: number, randAccelY: number, randAccelZ: number;
   let gravity: number;
   //we are defining a lot of variables used in the screen update functions globally so that they don't have to be redefined every frame.
-  let p: any;
+  let p: { attack?: any; next?: any; prev?: any; x?: any; y?: any; z?: any; velX?: any; velY?: any; velZ?: any; age?: any; dead?: any; right?: any };
   let outsideTest: boolean;
   let nextParticle: any;
   let sinAngle: number;
