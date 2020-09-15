@@ -1,4 +1,5 @@
-// Constants
+// @ts-nocheck
+
 let rgbString = 'rgba(0,235,136,'; //partial string for color which will be completed by appending alpha value.
 let sphereRad = 280;
 let radius_sp = 1;
@@ -38,7 +39,30 @@ const canvasEffect = () => {
   let randAccelX: number, randAccelY: number, randAccelZ: number;
   let gravity: number;
   //we are defining a lot of variables used in the screen update functions globally so that they don't have to be redefined every frame.
-  let p: { attack?: any; next?: any; prev?: any; x?: any; y?: any; z?: any; velX?: any; velY?: any; velZ?: any; age?: any; dead?: any; right?: any };
+  let p: {
+    next: any;
+    age?: any;
+    stuckTime?: any;
+    velX?: any;
+    accelX?: any;
+    velY?: any;
+    accelY?: any;
+    velZ?: any;
+    accelZ?: any;
+    x?: any;
+    y?: any;
+    z?: any;
+    projX?: any;
+    projY?: any;
+    attack?: any;
+    hold?: any;
+    decay?: any;
+    alpha?: any;
+    holdValue?: any;
+    initValue?: any;
+    lastValue?: any;
+    dead?: any;
+  };
   let outsideTest: boolean;
   let nextParticle: any;
   let sinAngle: number;
@@ -62,6 +86,7 @@ const canvasEffect = () => {
     var start = new Date().getTime(),
       handle = {};
     function loop() {
+      // @ts-ignore
       handle.value = requestAnimFrame(loop);
       var current = new Date().getTime(),
         delta = current - start;
@@ -70,6 +95,7 @@ const canvasEffect = () => {
         start = new Date().getTime();
       }
     }
+    // @ts-ignore
     handle.value = requestAnimFrame(loop);
     return handle;
   };
@@ -82,6 +108,75 @@ const canvasEffect = () => {
       sphereRad -= 5;
       if (sphereRad < 50) direction = 'top';
     }
+  };
+
+  const loop = (p) => {
+    //before list is altered record next particle
+    nextParticle = p.next;
+
+    //update age
+    p.age++;
+
+    //if the particle is past its "stuck" time, it will begin to move.
+    if (p.age > p.stuckTime) {
+      p.velX += p.accelX + randAccelX * (Math.random() * 2 - 1);
+      p.velY += p.accelY + randAccelY * (Math.random() * 2 - 1);
+      p.velZ += p.accelZ + randAccelZ * (Math.random() * 2 - 1);
+
+      p.x += p.velX;
+      p.y += p.velY;
+      p.z += p.velZ;
+    }
+
+    /*
+  We are doing two things here to calculate display coordinates.
+  The whole display is being rotated around a vertical axis, so we first calculate rotated coordinates for
+  x and z (but the y coordinate will not change).
+  Then, we take the new coordinates (rotX, y, rotZ), and project these onto the 2D view plane.
+  */
+    rotX = cosAngle * p.x + sinAngle * (p.z - sphereCenterZ);
+    rotZ = -sinAngle * p.x + cosAngle * (p.z - sphereCenterZ) + sphereCenterZ;
+    m = (radius_sp * fLen) / (fLen - rotZ);
+    p.projX = rotX * m + projCenterX;
+    p.projY = p.y * m + projCenterY;
+
+    //update alpha according to envelope parameters.
+    if (p.age < p.attack + p.hold + p.decay) {
+      if (p.age < p.attack) {
+        p.alpha = ((p.holdValue - p.initValue) / p.attack) * p.age + p.initValue;
+      } else if (p.age < p.attack + p.hold) {
+        p.alpha = p.holdValue;
+      } else if (p.age < p.attack + p.hold + p.decay) {
+        p.alpha = ((p.lastValue - p.holdValue) / p.decay) * (p.age - p.attack - p.hold) + p.holdValue;
+      }
+    } else {
+      p.dead = true;
+    }
+
+    //see if the particle is still within the viewable range.
+    if (p.projX > displayWidth || p.projX < 0 || p.projY < 0 || p.projY > displayHeight || rotZ > zMax) {
+      outsideTest = true;
+    } else {
+      outsideTest = false;
+    }
+
+    if (outsideTest || p.dead) {
+      recycle(p);
+      p = null;
+    } else {
+      //depth-dependent darkening
+      depthAlphaFactor = 1 - rotZ / zeroAlphaDepth;
+      depthAlphaFactor = depthAlphaFactor > 1 ? 1 : depthAlphaFactor < 0 ? 0 : depthAlphaFactor;
+      context.fillStyle = rgbString + depthAlphaFactor * p.alpha + ')';
+
+      //draw
+      context.beginPath();
+      context.arc(p.projX, p.projY, m * particleRad, 0, 2 * Math.PI, false);
+      context.closePath();
+      context.fill();
+    }
+
+    return (p = nextParticle);
   };
 
   const tick = () => {
@@ -129,72 +224,9 @@ const canvasEffect = () => {
 
     //update and draw particles
     p = particleList.first;
+
     while (p != null) {
-      //before list is altered record next particle
-      nextParticle = p.next;
-
-      //update age
-      p.age++;
-
-      //if the particle is past its "stuck" time, it will begin to move.
-      if (p.age > p.stuckTime) {
-        p.velX += p.accelX + randAccelX * (Math.random() * 2 - 1);
-        p.velY += p.accelY + randAccelY * (Math.random() * 2 - 1);
-        p.velZ += p.accelZ + randAccelZ * (Math.random() * 2 - 1);
-
-        p.x += p.velX;
-        p.y += p.velY;
-        p.z += p.velZ;
-      }
-
-      /*
-			We are doing two things here to calculate display coordinates.
-			The whole display is being rotated around a vertical axis, so we first calculate rotated coordinates for
-			x and z (but the y coordinate will not change).
-			Then, we take the new coordinates (rotX, y, rotZ), and project these onto the 2D view plane.
-			*/
-      rotX = cosAngle * p.x + sinAngle * (p.z - sphereCenterZ);
-      rotZ = -sinAngle * p.x + cosAngle * (p.z - sphereCenterZ) + sphereCenterZ;
-      m = (radius_sp * fLen) / (fLen - rotZ);
-      p.projX = rotX * m + projCenterX;
-      p.projY = p.y * m + projCenterY;
-
-      //update alpha according to envelope parameters.
-      if (p.age < p.attack + p.hold + p.decay) {
-        if (p.age < p.attack) {
-          p.alpha = ((p.holdValue - p.initValue) / p.attack) * p.age + p.initValue;
-        } else if (p.age < p.attack + p.hold) {
-          p.alpha = p.holdValue;
-        } else if (p.age < p.attack + p.hold + p.decay) {
-          p.alpha = ((p.lastValue - p.holdValue) / p.decay) * (p.age - p.attack - p.hold) + p.holdValue;
-        }
-      } else {
-        p.dead = true;
-      }
-
-      //see if the particle is still within the viewable range.
-      if (p.projX > displayWidth || p.projX < 0 || p.projY < 0 || p.projY > displayHeight || rotZ > zMax) {
-        outsideTest = true;
-      } else {
-        outsideTest = false;
-      }
-
-      if (outsideTest || p.dead) {
-        recycle(p);
-      } else {
-        //depth-dependent darkening
-        depthAlphaFactor = 1 - rotZ / zeroAlphaDepth;
-        depthAlphaFactor = depthAlphaFactor > 1 ? 1 : depthAlphaFactor < 0 ? 0 : depthAlphaFactor;
-        context.fillStyle = rgbString + depthAlphaFactor * p.alpha + ')';
-
-        //draw
-        context.beginPath();
-        context.arc(p.projX, p.projY, m * particleRad, 0, 2 * Math.PI, false);
-        context.closePath();
-        context.fill();
-      }
-
-      p = nextParticle;
+      p = loop(p);
     }
   };
 
@@ -320,12 +352,11 @@ const canvasEffect = () => {
 
     turnSpeed = (2 * Math.PI) / 1200; //the sphere will rotate at this speed (one complete rotation every 1600 frames).
     turnAngle = 0; //initial angle
-
-    requestInterval(tick, 10 / 24);
-    requestInterval(handleDirection, 500);
   };
 
   init();
+  requestInterval(tick, 10 / 24);
+  requestInterval(handleDirection, 500);
 
   return { setError, clearError, onUnmount, onResize };
 };
