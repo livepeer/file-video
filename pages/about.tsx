@@ -19,7 +19,7 @@ export default function AboutPage() {
           <span sx={{ color: "primary" }}>file.video</span>?
         </Heading>
         <div sx={{ maxWidth: "530px", textAlign: "center" }}>
-          <Text variant="large" sx={{ mb: 4 }}>
+          <Text variant="small" sx={{ mb: 4 }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cras
             ornare turpis in nec tortor cursus pulvinar ultricies. Sed rhoncus
             lacus non amet vestibulum tortor pellentesque aliquet. Praesent ac
@@ -28,9 +28,25 @@ export default function AboutPage() {
             eget. Ipsum, sit dui turpis vestibulum pellentesque. Netus
             scelerisque ut morbi faucibus viverra malesuada libero.
           </Text>
-          <Text variant="large">
-            Made with {"<3"} by <A variant="accent">basement.studio</A> &{" "}
-            <A variant="accent">Build Labs</A>
+          <Text variant="small">
+            Made with {"<3"} by{" "}
+            <A
+              variant="accent"
+              href="https://basement.studio"
+              target="_blank"
+              rel="noopener"
+            >
+              basement.studio
+            </A>{" "}
+            &{" "}
+            <A
+              variant="accent"
+              href="https://protocol.ai"
+              target="_blank"
+              rel="noopener"
+            >
+              Build Labs
+            </A>
           </Text>
         </div>
       </ViewportHeightBox>

@@ -84,6 +84,9 @@ export default function AccordionItem({
           borderBottom: isToggled ? "1px solid" : undefined,
           borderColor: "muted",
           textAlign: "left",
+          "&:hover": {
+            color: "primary",
+          },
         }}
       >
         {heading}
@@ -96,7 +99,7 @@ export default function AccordionItem({
           visibility: isToggled ? "visible" : "hidden",
           p: [2, 3],
           textAlign: "left",
-          fontSize: ["12px", "14px", null, null, "16px"],
+          fontSize: ["14px", "16px"],
           color: "gray",
         }}
         ref={contentRef}

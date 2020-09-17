@@ -7,7 +7,7 @@ import { useState } from "react";
 export default function HomePage() {
   const [error, setError] = useState<string>();
   return (
-    <Layout>
+    <Layout error={!!error} withParticlesBackground>
       <ViewportHeightBox
         sx={{
           display: "flex",
@@ -24,7 +24,7 @@ export default function HomePage() {
             : "Decentralized Video hosting for everyone."}
         </Heading>
         <Text
-          variant="large"
+          variant="normal"
           sx={{
             mb: [4, 5],
             mt: [3, 4],

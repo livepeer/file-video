@@ -6,12 +6,13 @@ import VideoPlayer from "../../components/video-player";
 import Spinner from "../../components/spinner";
 import { useRouter } from "next/router";
 import ViewportHeightBox from "components/viewport-height-box";
+import { useEffect, useState } from "react";
 
 export function getStaticProps({ params: { id: playbackId } }) {
   const src = `https://stream.mux.com/${playbackId}.m3u8`;
   const poster = `https://image.mux.com/${playbackId}/thumbnail.png`;
 
-  return { props: { playbackId, src, poster } };
+  return { props: { src, poster } };
 }
 
 export function getStaticPaths() {
@@ -21,27 +22,30 @@ export function getStaticPaths() {
   };
 }
 
-const Code = ({ children }) => (
-  <>
-    <span className="code">{children}</span>
-    <style jsx>{`
-      .code {
-        font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-          DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace,
-          serif;
-        color: #ff2b61;
-      }
-    `}</style>
-  </>
-);
-
-export default function Playback({ playbackId, src, poster }) {
+export default function Playback({ src, poster }) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
-  if (router.isFallback) {
+  useEffect(() => {
+    if (router.isFallback) return;
+    fetch(src).then((res) => {
+      if (res.status === 404) router.push("/");
+      else setIsLoading(false);
+    });
+  }, [router]);
+
+  if (isLoading) {
     return (
       <Layout>
-        <Spinner />
+        <ViewportHeightBox
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Spinner />
+        </ViewportHeightBox>
       </Layout>
     );
   }
@@ -65,7 +69,7 @@ export default function Playback({ playbackId, src, poster }) {
             This video is ready for playback
           </Heading>
           <Text
-            variant="large"
+            variant="normal"
             sx={{
               mb: [4, null, null, null, 5],
               mt: [3, 4],

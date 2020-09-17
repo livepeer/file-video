@@ -46,7 +46,7 @@ export default function FaqPage() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
+          justifyContent: "flex-start",
           alignItems: "center",
         }}
       >
@@ -55,7 +55,7 @@ export default function FaqPage() {
           Questions
         </Heading>
         <div sx={{ maxWidth: "530px", textAlign: "center" }}>
-          <Text variant="large" sx={{ mb: 4 }}>
+          <Text variant="normal" sx={{ mb: 4 }}>
             Everything you need to know about file.video.
             <br />
             You can go{" "}

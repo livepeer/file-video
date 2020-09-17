@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Container, NavLink, Flex, Link as A, Text } from "theme-ui";
+import { jsx, Container, NavLink, Flex, Link as A, Text, Box } from "theme-ui";
 import Head from "next/head";
 import Link from "next/link";
 import Logo from "./logos/file-video";
@@ -7,6 +7,8 @@ import LivepeerLogo from "./logos/livepeer";
 import FilecoinLogo from "./logos/filecoin";
 import GitHubLogo from "./logos/github";
 import { footerHeight, navHeight } from "lib/constants";
+import { useState, useCallback, useEffect } from "react";
+import ParticlesBackground from "./particles-background";
 
 interface Props {
   metaTitle?: string;
@@ -15,6 +17,8 @@ interface Props {
   children?: React.ReactNode;
   loadTwitterWidget?: boolean;
   url?: string;
+  withParticlesBackground?: boolean;
+  error?: boolean;
 }
 
 Layout.defaultProps = {
@@ -32,9 +36,29 @@ export default function Layout({
   children,
   loadTwitterWidget = false,
   url,
+  withParticlesBackground,
+  error,
 }: Props) {
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  const handleScroll = useCallback(() => {
+    const { scrollTop } = document.documentElement;
+    if (scrollTop > 0) setHasScrolled(true);
+    else setHasScrolled(false);
+  }, []);
+
+  useEffect(() => {
+    handleScroll();
+    document.addEventListener("scroll", handleScroll);
+
+    return () => {
+      document.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <Container sx={{ minHeight: "100vh" }}>
+    <Box sx={{ bg: "background", minHeight: "100vh" }}>
+      {withParticlesBackground && <ParticlesBackground error={error} />}
       <Head>
         <title>Livepeer + Filecoin</title>
         <link rel="icon" href="/favicon.png" />
@@ -62,80 +86,87 @@ export default function Layout({
       </Head>
       <header
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          py: 4,
           width: "100%",
           height: navHeight,
           position: "sticky",
           top: 0,
-          bg: "rgba(0,0,0,.5)",
-          backdropFilter: "saturate(180%) blur(5px)",
+          bg: hasScrolled ? "rgba(0,0,0,.5)" : "rgba(0,0,0,0)",
+          backdropFilter: hasScrolled ? "saturate(180%) blur(5px)" : undefined,
           zIndex: "header",
         }}
       >
-        <Logo />
-        <Flex sx={{ alignItems: "center" }}>
-          <Link href="/about" passHref>
-            <NavLink sx={{ mr: 4 }}>About</NavLink>
-          </Link>
-          <Link href="/faq" passHref>
-            <NavLink>FAQ</NavLink>
-          </Link>
-          <A
-            href="https://github.com/livepeer/file-video"
-            target="_blank"
-            rel="noopener"
-            sx={{ display: ["flex", "none"], alignItems: "center", ml: 4 }}
-          >
-            <GitHubLogo id="nav" />
-          </A>
-        </Flex>
+        <Container
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            py: 4,
+          }}
+        >
+          <Logo />
+          <Flex sx={{ alignItems: "center" }}>
+            <Link href="/about" passHref>
+              <NavLink sx={{ mr: 4 }}>About</NavLink>
+            </Link>
+            <Link href="/faq" passHref>
+              <NavLink>FAQ</NavLink>
+            </Link>
+            <A
+              href="https://github.com/livepeer/file-video"
+              target="_blank"
+              rel="noopener"
+              sx={{ display: ["flex", "none"], alignItems: "center", ml: 4 }}
+            >
+              <GitHubLogo id="nav" />
+            </A>
+          </Flex>
+        </Container>
       </header>
-      <main>{children}</main>
-      <footer
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: ["center", "space-between"],
-          py: 3,
-          height: footerHeight,
-        }}
-      >
-        <Text sx={{ display: "flex", alignItems: "center" }} variant="normal">
-          Powered by
-          <A
-            href="https://livepeer.org"
-            target="_blank"
-            rel="noopener"
-            sx={{ ml: "12px", display: "flex", alignItems: "center" }}
-          >
-            <LivepeerLogo pushSx={{ mr: 2 }} />
-            Livepeer
-          </A>
-          &nbsp;&
-          <A
-            href="https://filecoin.io"
-            target="_blank"
-            rel="noopener"
-            sx={{ ml: "12px", display: "flex", alignItems: "center" }}
-          >
-            <FilecoinLogo pushSx={{ mr: 2 }} />
-            Filecoin
-          </A>
-        </Text>
-        <Text variant="normal">
-          <A
-            href="https://github.com/livepeer/file-video"
-            target="_blank"
-            rel="noopener"
-            sx={{ display: ["none", "flex"], alignItems: "center" }}
-          >
-            <GitHubLogo pushSx={{ mr: 2 }} /> github.com/livepeer/file-video
-          </A>
-        </Text>
-      </footer>
-    </Container>
+      <Container sx={{ zIndex: "general", position: "relative" }}>
+        <main>{children}</main>
+        <footer
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: ["center", "space-between"],
+            py: 3,
+            height: footerHeight,
+          }}
+        >
+          <Text sx={{ display: "flex", alignItems: "center" }} variant="small">
+            Powered by
+            <A
+              href="https://livepeer.org"
+              target="_blank"
+              rel="noopener"
+              sx={{ ml: "12px", display: "flex", alignItems: "center" }}
+            >
+              <LivepeerLogo pushSx={{ mr: 2 }} />
+              Livepeer
+            </A>
+            &nbsp;&
+            <A
+              href="https://filecoin.io"
+              target="_blank"
+              rel="noopener"
+              sx={{ ml: "12px", display: "flex", alignItems: "center" }}
+            >
+              <FilecoinLogo pushSx={{ mr: 2 }} />
+              Filecoin
+            </A>
+          </Text>
+          <Text variant="small">
+            <A
+              href="https://github.com/livepeer/file-video"
+              target="_blank"
+              rel="noopener"
+              sx={{ display: ["none", "flex"], alignItems: "center" }}
+            >
+              <GitHubLogo pushSx={{ mr: 2 }} /> github.com/livepeer/file-video
+            </A>
+          </Text>
+        </footer>
+      </Container>
+    </Box>
   );
 }
