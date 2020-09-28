@@ -41,11 +41,11 @@ export default function AboutPage() {
             &{" "}
             <A
               variant="accent"
-              href="https://protocol.ai"
+              href="https://buidllabs.io"
               target="_blank"
               rel="noopener"
             >
-              Build Labs
+              Buidl Labs
             </A>
           </Text>
         </div>
