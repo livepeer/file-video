@@ -36,8 +36,8 @@ export default function HomePage() {
             error
           ) : (
             <>
-              file.video is the easiest way to upload, edit, and share video.
-              It’s free to use and there’s no signup required.
+              file.video is the easiest way to upload and share video. It’s free
+              to use and there’s no signup required.
             </>
           )}
         </Text>
