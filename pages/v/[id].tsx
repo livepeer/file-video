@@ -8,9 +8,14 @@ import { useRouter } from "next/router";
 import ViewportHeightBox from "components/viewport-height-box";
 import { useEffect, useState } from "react";
 
-export function getStaticProps({ params: { id: playbackId } }) {
-  const src = `https://stream.mux.com/${playbackId}.m3u8`;
-  const poster = `https://image.mux.com/${playbackId}/thumbnail.png`;
+export async function getStaticProps({ params: { id: id } }) {
+  const assetURL = process.env.DEMUX_URL + 'asset';
+
+  const res = await fetch(assetURL + '/' + id);
+  const asset = await res.json();
+
+  const src = asset['stream_url'];
+  const poster = asset['thumbnail'];
 
   return { props: { src, poster } };
 }

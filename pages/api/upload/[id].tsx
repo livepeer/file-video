@@ -1,20 +1,22 @@
-import Mux from "@mux/mux-node";
-const { Video } = new Mux();
-
 export default async function uploadHandler(req, res) {
   const { method } = req;
 
+  const uploadStatusURL = process.env.DEMUX_URL + 'upload';
+
   switch (method) {
-    case "GET":
+    case 'GET':
       try {
-        const upload = await Video.Uploads.get(req.query.id);
+        const resp = await fetch(uploadStatusURL + '/' + req.query.id);
+        const data = await resp.json();
+
         res.json({
           upload: {
-            status: upload.status,
-            url: upload.url,
-            asset_id: upload.asset_id,
-          },
+            status: data['status'],
+            url: data['url'],
+            asset_id: data['asset_id'],
+          }
         });
+        // TODO: handle upload failure case
       } catch (e) {
         res.statusCode = 500;
         console.error("Request error", e);

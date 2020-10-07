@@ -5192,6 +5192,11 @@ randomfill@^1.0.3:
     randombytes "^2.0.5"
     safe-buffer "^5.1.0"
 
+rb-resumablejs@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/rb-resumablejs/-/rb-resumablejs-1.1.2.tgz#c84c6936ff091eff03954322a7d505a289710059"
+  integrity sha512-Jcm2hGlyrLPZcdxlMDL29BbeG80kaCnTJKxTlBrC+2SFE+46u+ZwLSY4l7pDrkpyypxOg1roXmz1cJgJwoYqVg==
+
 react-dom@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.13.1.tgz#c1bd37331a0486c078ee54c4740720993b2e0e7f"
