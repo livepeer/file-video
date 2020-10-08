@@ -2,9 +2,10 @@
 import { Button, Box, jsx } from "theme-ui";
 import { useEffect, useRef, useState, useMemo } from "react";
 import Router from "next/router";
-import * as UpChunk from "@mux/upchunk";
 import useSwr from "swr";
 import LoadingDots from "./loading-dots";
+
+const Resumable = require("rb-resumablejs/resumable");
 
 const acceptedFileTypes = ["video/mp4"];
 
@@ -59,22 +60,32 @@ const UploadForm = ({ error, setError }: Props) => {
   const asset = useMemo(() => assetData?.asset, [assetData]);
 
   useEffect(() => {
-    if (asset?.playback_id && asset.status === "ready") {
-      Router.push("/v/[id]", `/v/${asset.playback_id}`);
+    if (asset) {
+      if (asset?.id && asset.ready == true) {
+        Router.push("/v/[id]", `/v/${asset.id}`);
+      } else if (asset?.id && asset.errors) {
+        setError("Error streaming video")
+      }
     }
   }, [asset]);
 
+  const assetURL = process.env.DEMUX_URL + 'asset';
+  const username = process.env.TOKEN_ID;
+  const password = process.env.TOKEN_SECRET;
+  const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`, 'utf-8').toString('base64')
+
   const createUpload = async () => {
     try {
-      // TODO: replace this api with the livepeer/filecoin gateway api
-      const res = await fetch("/api/upload", {
-        method: "POST",
+      const res = await fetch(assetURL, {
+          method: "POST",
+          headers: {
+            'Authorization': authHeader,
+          },
       });
-      const { id, url } = await res.json();
-      setUploadId(id);
+      const { asset_id, url } = await res.json();
+      setUploadId(asset_id);
       return url;
     } catch (e) {
-      console.error("Error in createUpload", e);
       setError(e?.message ?? "Error creating upload");
     }
   };
@@ -84,27 +95,44 @@ const UploadForm = ({ error, setError }: Props) => {
     setIsUploading(true);
     setProgress(0);
 
-    const file = inputRef.current.files[0];
-    if (!acceptedFileTypes.includes(file.type)) {
-      setError(`File type ${file.type} not supported`);
+    const myfile = inputRef.current.files[0];
+    if (!acceptedFileTypes.includes(myfile.type)) {
+      setError(`File type ${myfile.type} not supported`);
       return;
     }
-    const upload = UpChunk.createUpload({
-      file,
-      endpoint: createUpload,
-    });
 
-    upload.on("error", (err) => {
-      setError(err?.detail?.message ?? "Error creating upload");
-    });
+    const fileSize = myfile.size;
+    if (fileSize > 30 * 1024 * 1024) {
+      setError(`Please upload a file smaller than 30MB`);
+      return;
+    }
 
-    upload.on("progress", (progress) => {
-      setProgress(Math.floor(progress.detail));
-    });
+    createUpload().then(targetUrl => {
+      const r = new Resumable({
+        target: targetUrl,
+      });
+      r.addFile(myfile);
+      // TODO: Fallback to direct upload if Resumable.js isn't supported by the browser
+      if (!r.support) {
+        setError("Please use a newer browser")
+      }
 
-    upload.on("success", () => {
-      setIsPreparing(true);
-    });
+      r.on('fileAdded', function (file) {
+        r.upload();
+      });
+
+      r.on('progress', function () {
+        setProgress(Math.floor(r.progress() * 100));
+      })
+
+      r.on('fileSuccess', function (file, message) {
+        setIsPreparing(true);
+      });
+  
+      r.on('fileError', function (file, message) {
+        setError(message ?? "Error creating upload");
+      });
+    })
   };
 
   useEffect(() => {

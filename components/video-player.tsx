@@ -58,7 +58,7 @@ export default function VideoPlayer({ src, poster }) {
   }, [src, videoRef]);
 
   const handleCopy = useCallback(() => {
-    copyTextToClipboard(`https://file.video${router.asPath}`);
+    copyTextToClipboard(`${window.location.origin}${router.asPath}`);
     setCopied(true);
   }, [router]);
 
@@ -99,7 +99,7 @@ export default function VideoPlayer({ src, poster }) {
               whiteSpace: "nowrap",
             }}
           >
-            https://file.video{router.asPath}
+            {window.location.origin}{router.asPath}
           </A>
         </Link>
         <IconButton
