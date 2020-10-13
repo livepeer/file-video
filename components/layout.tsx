@@ -23,8 +23,7 @@ interface Props {
 
 Layout.defaultProps = {
   metaTitle: "file.video",
-  metaDescription:
-    "Decentralized live video streaming, built on the Ethereum blockchain. Livepeer is live on Ethereum mainnet.",
+  metaDescription: "Decentralized Video hosting for everyone.",
   url: "https://file.video",
   image: "https://file.video/OG.png",
 };
