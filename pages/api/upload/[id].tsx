@@ -1,20 +1,42 @@
+import Cors from "cors";
+
+// Initializing the cors middleware
+const cors = Cors({
+  methods: ["GET", "HEAD"],
+});
+
+// Helper method to wait for a middleware to execute before continuing
+// And to throw an error when an error happens in a middleware
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+
+      return resolve(result);
+    });
+  });
+}
+
 export default async function uploadHandler(req, res) {
+  await runMiddleware(req, res, cors);
   const { method } = req;
 
-  const uploadStatusURL = process.env.DEMUX_URL + 'upload';
+  const uploadStatusURL = process.env.DEMUX_URL + "upload";
 
   switch (method) {
-    case 'GET':
+    case "GET":
       try {
-        const resp = await fetch(uploadStatusURL + '/' + req.query.id);
+        const resp = await fetch(uploadStatusURL + "/" + req.query.id);
         const data = await resp.json();
 
         res.json({
           upload: {
-            status: data['status'],
-            url: data['url'],
-            asset_id: data['asset_id'],
-          }
+            status: data["status"],
+            url: data["url"],
+            asset_id: data["asset_id"],
+          },
         });
         // TODO: handle upload failure case
       } catch (e) {
