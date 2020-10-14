@@ -59,7 +59,7 @@ export default function Layout({
     <Box sx={{ bg: "background", minHeight: "100vh" }}>
       {withParticlesBackground && <ParticlesBackground error={error} />}
       <Head>
-        <title>Livepeer + Filecoin</title>
+        <title>file.video</title>
         <link rel="icon" href="/favicon.png" />
         {metaTitle && <meta property="og:title" content={metaTitle} />}
         {metaTitle && <meta property="twitter:title" content={metaTitle} />}
