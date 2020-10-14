@@ -8,35 +8,19 @@ import { AccordionItemProps } from "components/accordion/item";
 
 const faqs: AccordionItemProps[] = [
   {
-    heading: "The most popular question",
+    heading: "How does file.video work?",
     content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cras ornare turpis in nec tortor cursus pulvinar ultricies. Sed rhoncus lacus non amet vestibulum tortor pellentesque aliquet. Praesent ac quis scelerisque tincidunt nec. Maecenas consectetur vitae magna volutpat tellus, vulputate. Maecenas vitae nullam mattis eu porta eget. Ipsum, sit dui turpis vestibulum pellentesque. Netus scelerisque ut morbi faucibus viverra malesuada libero.",
+      <span>When you upload a video file to file.video, it first gets sent into both the Livepeer network along with fees (settled in <a sx={{color: 'primary'}} target="_blank" href="https://ethereum.org/en/eth/">ETH</a>) where it gets transcoded. Transcoding is the process of taking a raw video file and reformatting it so that no matter what bandwidth you have - whether 2g or 5g - and no matter what device, you're ensured the most optimal viewing experience. Once the file is transcoded, the reformatted video gets sent into the Filecoin network along with fees (settled in <a sx={{color: 'primary'}} target="_blank" href="https://filecoin.io/blog/introducing-the-filecoin-economy/">Filecoin token</a>) for storage and playback.</span>,
   },
   {
-    heading: "The most popular question 2",
+    heading: "Who pays the network fees on my behalf when I upload a video?",
     content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cras ornare turpis in nec tortor cursus pulvinar ultricies. Sed rhoncus lacus non amet vestibulum tortor pellentesque aliquet. Praesent ac quis scelerisque tincidunt nec. Maecenas consectetur vitae magna volutpat tellus, vulputate. Maecenas vitae nullam mattis eu porta eget. Ipsum, sit dui turpis vestibulum pellentesque. Netus scelerisque ut morbi faucibus viverra malesuada libero.",
+      <span>Transcoding and storage fees are subsidized by <a sx={{color: 'primary'}} target="_blank" href="https://livepeer.com/team">Livepeer, Inc.</a> and <a sx={{color: 'primary'}} target="_blank" href="https://protocol.ai/">Protocol Labs</a>.</span>
   },
   {
-    heading: "The most popular question 3",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cras ornare turpis in nec tortor cursus pulvinar ultricies. Sed rhoncus lacus non amet vestibulum tortor pellentesque aliquet. Praesent ac quis scelerisque tincidunt nec. Maecenas consectetur vitae magna volutpat tellus, vulputate. Maecenas vitae nullam mattis eu porta eget. Ipsum, sit dui turpis vestibulum pellentesque. Netus scelerisque ut morbi faucibus viverra malesuada libero.",
-  },
-  {
-    heading: "The most popular question 4",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cras ornare turpis in nec tortor cursus pulvinar ultricies. Sed rhoncus lacus non amet vestibulum tortor pellentesque aliquet. Praesent ac quis scelerisque tincidunt nec. Maecenas consectetur vitae magna volutpat tellus, vulputate. Maecenas vitae nullam mattis eu porta eget. Ipsum, sit dui turpis vestibulum pellentesque. Netus scelerisque ut morbi faucibus viverra malesuada libero.",
-  },
-  {
-    heading: "The most popular question 5",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cras ornare turpis in nec tortor cursus pulvinar ultricies. Sed rhoncus lacus non amet vestibulum tortor pellentesque aliquet. Praesent ac quis scelerisque tincidunt nec. Maecenas consectetur vitae magna volutpat tellus, vulputate. Maecenas vitae nullam mattis eu porta eget. Ipsum, sit dui turpis vestibulum pellentesque. Netus scelerisque ut morbi faucibus viverra malesuada libero.",
-  },
-  {
-    heading: "The most popular question 6",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cras ornare turpis in nec tortor cursus pulvinar ultricies. Sed rhoncus lacus non amet vestibulum tortor pellentesque aliquet. Praesent ac quis scelerisque tincidunt nec. Maecenas consectetur vitae magna volutpat tellus, vulputate. Maecenas vitae nullam mattis eu porta eget. Ipsum, sit dui turpis vestibulum pellentesque. Netus scelerisque ut morbi faucibus viverra malesuada libero.",
-  },
+    heading: "Who earns the subsidized fees?",
+    content: " The Livepeer and Filecoin networks are made up of many different computers run by many different people and organizations. There are many different actors within these networks that each a portion of the transcoding and storage fees sent by file.video on your behalf."
+  }
 ];
 
 export default function FaqPage() {

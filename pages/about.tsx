@@ -20,13 +20,7 @@ export default function AboutPage() {
         </Heading>
         <div sx={{ maxWidth: "530px", textAlign: "center" }}>
           <Text variant="small" sx={{ mb: 4 }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cras
-            ornare turpis in nec tortor cursus pulvinar ultricies. Sed rhoncus
-            lacus non amet vestibulum tortor pellentesque aliquet. Praesent ac
-            quis scelerisque tincidunt nec. Maecenas consectetur vitae magna
-            volutpat tellus, vulputate. Maecenas vitae nullam mattis eu porta
-            eget. Ipsum, sit dui turpis vestibulum pellentesque. Netus
-            scelerisque ut morbi faucibus viverra malesuada libero.
+            File.video is an open source, decentralized and censorship-resistent video hosting solution powered by the Livepeer and Filecoin networks. 
           </Text>
           <Text variant="small">
             Made with {"<3"} by{" "}
