@@ -19,7 +19,7 @@ const faqs: AccordionItemProps[] = [
   },
   {
     heading: "Who earns the subsidized fees?",
-    content: " The Livepeer and Filecoin networks are made up of many different computers run by many different people and organizations. There are many different actors within these networks that each a portion of the transcoding and storage fees sent by file.video on your behalf."
+    content: " The Livepeer and Filecoin networks are made up of many different computers run by many different people and organizations. Different actors within these networks earn a portion of the transcoding and storage fees sent by file.video on your behalf."
   }
 ];
 
