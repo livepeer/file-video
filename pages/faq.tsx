@@ -10,7 +10,7 @@ const faqs: AccordionItemProps[] = [
   {
     heading: "How does file.video work?",
     content:
-      <span>When you upload a video file to file.video, it first gets sent into both the Livepeer network along with fees (settled in <a sx={{color: 'primary'}} target="_blank" href="https://ethereum.org/en/eth/">ETH</a>) where it gets transcoded. Transcoding is the process of taking a raw video file and reformatting it so that no matter what bandwidth you have - whether 2g or 5g - and no matter what device, you're ensured the most optimal viewing experience. Once the file is transcoded, the reformatted video gets sent into the Filecoin network along with fees (settled in <a sx={{color: 'primary'}} target="_blank" href="https://filecoin.io/blog/introducing-the-filecoin-economy/">Filecoin token</a>) for storage and playback.</span>,
+      <span>When you upload a video file to file.video, it first gets sent into the Livepeer network along with fees (settled in <a sx={{color: 'primary'}} target="_blank" href="https://ethereum.org/en/eth/">ETH</a>) where the video gets transcoded. Transcoding is the process of taking a raw video file and reformatting it so that no matter what bandwidth you have - whether 2g or 5g - and no matter what device, you're ensured the most optimal viewing experience. Once the file is transcoded, the reformatted video gets sent into the Filecoin network along with fees (settled in <a sx={{color: 'primary'}} target="_blank" href="https://filecoin.io/blog/introducing-the-filecoin-economy/">Filecoin token</a>) for storage and playback.</span>,
   },
   {
     heading: "Who pays the network fees on my behalf when I upload a video?",
