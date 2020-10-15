@@ -64,23 +64,25 @@ const UploadForm = ({ error, setError }: Props) => {
       if (asset?.id && asset.ready == true) {
         Router.push("/v/[id]", `/v/${asset.id}`);
       } else if (asset?.id && asset.errors) {
-        setError("Error streaming video")
+        setError("Error streaming video");
       }
     }
   }, [asset]);
 
-  const assetURL = process.env.DEMUX_URL + 'asset';
+  const assetURL = process.env.DEMUX_URL + "asset";
   const username = process.env.TOKEN_ID;
   const password = process.env.TOKEN_SECRET;
-  const authHeader = 'Basic ' + Buffer.from(`${username}:${password}`, 'utf-8').toString('base64')
+  const authHeader =
+    "Basic " +
+    Buffer.from(`${username}:${password}`, "utf-8").toString("base64");
 
   const createUpload = async () => {
     try {
       const res = await fetch(assetURL, {
-          method: "POST",
-          headers: {
-            'Authorization': authHeader,
-          },
+        method: "POST",
+        headers: {
+          Authorization: authHeader,
+        },
       });
       const { asset_id, url } = await res.json();
       setUploadId(asset_id);
@@ -107,32 +109,32 @@ const UploadForm = ({ error, setError }: Props) => {
       return;
     }
 
-    createUpload().then(targetUrl => {
+    createUpload().then((targetUrl) => {
       const r = new Resumable({
         target: targetUrl,
       });
       r.addFile(myfile);
       // TODO: Fallback to direct upload if Resumable.js isn't supported by the browser
       if (!r.support) {
-        setError("Please use a newer browser")
+        setError("Please use a newer browser");
       }
 
-      r.on('fileAdded', function (file) {
+      r.on("fileAdded", function (file) {
         r.upload();
       });
 
-      r.on('progress', function () {
+      r.on("progress", function () {
         setProgress(Math.floor(r.progress() * 100));
-      })
+      });
 
-      r.on('fileSuccess', function (file, message) {
+      r.on("fileSuccess", function (file, message) {
         setIsPreparing(true);
       });
-  
-      r.on('fileError', function (file, message) {
+
+      r.on("fileError", function (file, message) {
         setError(message ?? "Error creating upload");
       });
-    })
+    });
   };
 
   useEffect(() => {
@@ -175,6 +177,7 @@ const UploadForm = ({ error, setError }: Props) => {
           type="file"
           onChange={startUpload}
           ref={inputRef}
+          accept={acceptedFileTypes.join(",")}
         />
       </label>
     </Box>
