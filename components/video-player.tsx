@@ -1,10 +1,12 @@
 /** @jsx jsx */
 import { Link as A, jsx, IconButton } from "theme-ui";
 import { useEffect, useRef, useCallback, useState } from "react";
-import Hls from "hls.js";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FiCopy, FiCheck } from "react-icons/fi";
+import videojs from 'video.js';
+import 'videojs-contrib-quality-levels';
+import 'videojs-hls-quality-selector';
 
 function fallbackCopyTextToClipboard(text) {
   const textArea = document.createElement("textarea");
@@ -26,36 +28,28 @@ function copyTextToClipboard(text) {
 
 export default function VideoPlayer({ src, poster }) {
   const router = useRouter();
-  const videoRef = useRef(null);
   const [copied, setCopied] = useState(false);
+  const [videoEl, setVideoEl] = useState(null);
+  const onVideo = useCallback((el) => {
+    setVideoEl(el);
+  }, []);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    if (videoEl == null) return;
 
-    video.controls = true;
-    let hls;
-
-    if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      // This will run in safari, where HLS is supported natively
-      video.src = src;
-    } else if (Hls.isSupported()) {
-      // This will run in all other modern browsers
-      hls = new Hls();
-      hls.loadSource(src);
-      hls.attachMedia(video);
-    } else {
-      console.error(
-        "This is an old browser that does not support MSE https://developer.mozilla.org/en-US/docs/Web/API/Media_Source_Extensions_API"
-      );
-    }
+    const player = videojs(videoEl);
+    player.src({
+      src: src,
+      type: 'application/x-mpegURL'
+    });
+    player.hlsQualitySelector({
+      displayCurrentQuality: true,
+    });
 
     return () => {
-      if (hls) {
-        hls.destroy();
-      }
-    };
-  }, [src, videoRef]);
+      player.dispose();
+    }
+  }, [src, videoEl]);
 
   const handleCopy = useCallback(() => {
     copyTextToClipboard(`${window.location.origin}${router.asPath}`);
@@ -73,15 +67,20 @@ export default function VideoPlayer({ src, poster }) {
     <div
       sx={{ textAlign: "center", maxWidth: "100%", width: "100%", mx: "auto" }}
     >
-      <video
-        ref={videoRef}
-        poster={poster}
-        sx={{
-          borderRadius: "lg",
-          width: "100%",
-          "&:focus": { outline: "none" },
-        }}
-      />
+      <div data-vjs-player>
+        <video 
+          ref={onVideo}
+          className="video-js vjs-default-skin vjs-big-play-centered"
+          playsInline
+          controls
+          poster={poster}
+          sx={{
+            borderRadius: "lg",
+            width: "100%",
+            "&:focus": { outline: "none" },
+          }}
+        />
+      </div>
       <div
         sx={{
           display: "flex",
