@@ -37,7 +37,13 @@ export default function VideoPlayer({ src, poster }) {
   useEffect(() => {
     if (videoEl == null) return;
 
-    const player = videojs(videoEl);
+    const player = videojs(videoEl, {
+      html5: {
+        hls: {
+          overrideNative: true,
+        }
+      },
+    });
     player.src({
       src: src,
       type: 'application/x-mpegURL'
