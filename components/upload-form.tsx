@@ -44,6 +44,9 @@ const UploadForm = ({ error, setError }: Props) => {
       setUpload(data.upload);
       setIsPreparing(false);
     }
+    if (data?.upload?.errors) {
+      setError("Error creating upload");
+    }
   }, [data]);
 
   const { data: assetData } = useSwr(

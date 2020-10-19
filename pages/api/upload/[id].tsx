@@ -36,9 +36,13 @@ export default async function uploadHandler(req, res) {
             status: data["status"],
             url: data["url"],
             asset_id: data["asset_id"],
+            errors: data["error"],
           },
         });
-        // TODO: handle upload failure case
+        if (data["status"] || data["error"]) {
+          console.log("completed");
+          res.end();
+        }
       } catch (e) {
         res.statusCode = 500;
         console.error("Request error", e);
