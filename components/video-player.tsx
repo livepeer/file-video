@@ -113,6 +113,27 @@ export default function VideoPlayer({ src, poster }) {
         >
           {copied ? <FiCheck /> : <FiCopy />}
         </IconButton>
+        <Link
+          href={
+            "//twitter.com/intent/tweet?text=" +
+            encodeURIComponent(
+              "Uploaded a video to the decentralized web using file.video built by @buidllabs & @basementdot.\n\n" +
+                window.location.origin +
+                router.asPath +
+                "\n\n#Web3 is here 🚀"
+            )
+          }
+          passHref={true}
+        >
+          <a target="_blank">
+            <img
+              alt="Tweet"
+              src="/twitter_all_white.png"
+              width="38"
+              height="38"
+            />
+          </a>
+        </Link>
       </div>
     </div>
   );
