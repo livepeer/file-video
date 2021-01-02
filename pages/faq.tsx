@@ -41,12 +41,6 @@ export default function FaqPage() {
         <div sx={{ maxWidth: "530px", textAlign: "center" }}>
           <Text variant="normal" sx={{ mb: 4 }}>
             Everything you need to know about file.video.
-            <br />
-            You can go{" "}
-            <Link href="/" passHref>
-              <A variant="accent">back home</A>
-            </Link>{" "}
-            to start uploading videos.
           </Text>
           <Accordion items={faqs} />
         </div>
