@@ -10,7 +10,9 @@ const Resumable = require("rb-resumablejs/resumable");
 const acceptedFileTypes = ["video/mp4"];
 
 const fetcher = async (url: string) => {
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    credentials: 'omit'
+  });
   return res.json();
 };
 
