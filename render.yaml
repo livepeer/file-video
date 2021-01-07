@@ -1,0 +1,7 @@
+services:
+- type: web
+  name: file-video
+  env: node
+  plan: starter
+  buildCommand: yarn; yarn build
+  startCommand: yarn start
