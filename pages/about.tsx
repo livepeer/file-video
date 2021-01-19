@@ -20,7 +20,7 @@ export default function AboutPage() {
         </Heading>
         <div sx={{ maxWidth: "530px", textAlign: "center" }}>
           <Text variant="small" sx={{ mb: 4 }}>
-            File.video is an open source, decentralized and censorship-resistent video hosting solution powered by the Livepeer and Filecoin networks. It's the easiest way to upload and share video. It’s free to use and there’s no signup required.
+            File.video is an open source, decentralized and censorship-resistant video hosting solution powered by the Livepeer and Filecoin networks. It's the easiest way to upload and share video. It’s free to use and there’s no signup required.
           </Text>
           <Text variant="small">
             Made with {"<3"} by{" "}
