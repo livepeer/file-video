@@ -44,7 +44,7 @@ export default function HomePage() {
           )}
         </Text>
         <UploadForm error={error} setError={setError} />
-        <Text sx={{ fontSize: 12, mt: 2 }}>
+        <Text sx={{ textAlign: ["center", "left", "left"], fontSize: 12, mt: 2 }}>
           30mb max file size. MP4 files only.
         </Text>
       </ViewportHeightBox>
