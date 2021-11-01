@@ -21,7 +21,7 @@
     "react-icons": "^3.11.0",
     "swr": "^0.2.0",
     "theme-ui": "^0.3.1",
-    "video.js": "^7.9.7",
+    "video.js": "^7.14.3",
     "videojs-contrib-quality-levels": "^2.0.9",
     "videojs-hls-quality-selector": "^1.1.4"
   },
