@@ -14,10 +14,12 @@ export default function HomePage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-        }}>
+        }}
+      >
         <Heading
           variant="heading.1"
-          sx={{ textAlign: ["center", "left"], maxWidth: "1112px" }}>
+          sx={{ textAlign: ["center", "left"], maxWidth: "1112px" }}
+        >
           {error
             ? "Something went wrong, please try again."
             : "Decentralized Video hosting for everyone."}
@@ -29,24 +31,24 @@ export default function HomePage() {
             mt: [3, 4],
             maxWidth: "600px",
             textAlign: ["center", "left"],
-          }}>
+          }}
+        >
           {error ? (
             error
           ) : (
             <>
-              file.video is an experiment in decentralized video hosting powered
-              by Livepeer and Filecoin. It’s free to use and there’s no signup
-              required.{" "}
+              File.video was a product demo built to demonstrate a video hosting
+              service powered by Filecoin and Livepeer. While the demo is no
+              longer being maintained, the code remains open sourced.
               <Link href="/faq" passHref>
-                <A sx={{ display: "block", color: "primary" }}>Learn More →</A>
+                <A sx={{ mt: 3, display: "block", color: "primary" }}>
+                  Learn More About the Demo →
+                </A>
               </Link>
             </>
           )}
         </Text>
-        <UploadForm error={error} setError={setError} />
-        <Text sx={{ textAlign: ["center", "left", "left"], fontSize: 12, mt: 2 }}>
-          30mb max file size. MP4 files only.
-        </Text>
+        {/* <UploadForm error={error} setError={setError} /> */}
       </ViewportHeightBox>
     </Layout>
   );
